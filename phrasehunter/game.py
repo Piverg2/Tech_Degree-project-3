@@ -5,6 +5,7 @@ from phrasehunter.phrase import Phrase
 class Game:
     def __init__(self):
         self.missed = 0
+        self.clue_received = 0
         self.phrases = [Phrase('Hello world'),
             Phrase('Just keep swimming'),
             Phrase('Get to the chopper'),
@@ -12,7 +13,7 @@ class Game:
             Phrase('May the force be with you')
             ]
         self.active_phrases = self.get_random_phrase()
-        self.guesses = []
+        self.guesses = [" "]
 
 
     def start(self):
@@ -26,8 +27,16 @@ class Game:
             self.active_phrases.check_guess(user_guess)
             if not self.active_phrases.check_guess(user_guess):
                 self.missed += 1
+            if self.missed == 3 and self.clue_received != 1:
+                self.clue_received += 1
+                clue = input("\nWould you like a free letter? (Y/N) ")
+                if clue.lower() == 'y':
+                    self.active_phrases.get_clue(self.guesses)
+                else:
+                    continue
         self.game_over()
         self.play_again()
+
 
     def welcome(self):
         print("\n********************************")
@@ -49,11 +58,11 @@ class Game:
                     raise ValueError("\nThis phrase only contains letters")
                 elif len(guess) > 1:
                     raise ValueError("\nOne letter at a time please!")
-                
+                elif guess in self.guesses:
+                    raise ValueError("\nYou already guessed that letter!")            
             except ValueError as err:
                 print(err)
-                print("Try again!")
-                
+                print("Try again!")              
             else: 
                 return guess
 
@@ -63,9 +72,10 @@ class Game:
         if self.missed == 5:
             print("\nNumber missed: ", self.missed)
             print("\nSorry, you ran out of guesses! Better luck next time!")
-            print("\nThe correct phrase was: {}\n".format(self.active_phrases.phrase))
+            print("\nThe correct phrase was: {}\n".format(self.active_phrases.phrase.capitalize()))
         elif self.active_phrases.check_complete(self.guesses) == True:
-            print("Horray! You guessed the Phrase! You Win!!")
+            print("\n{}!".format(self.active_phrases.phrase.capitalize()))
+            print("\nHorray! You guessed the Phrase! You Win!!")
     
     
     def play_again(self):
@@ -77,3 +87,4 @@ class Game:
             self.start()
         else:
             print("\nThanks for playing!")
+        

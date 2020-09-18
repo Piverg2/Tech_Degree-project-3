@@ -2,8 +2,7 @@
 class Phrase:
     def __init__(self, phrase):
         self.phrase = phrase.lower()
-
-
+        self.clue_received = 0
     def display(self, guess):
         for letter in self.phrase: 
             if letter in guess:
@@ -20,9 +19,16 @@ class Phrase:
             else:
                 return False
     
+    
+    def get_clue(self, guess):
+        self.clue_received += 1
+        for letter in self.phrase:
+            if letter not in guess:
+                print(f"\nTry '{letter}''", end = " ")
+                break
 
     def check_complete(self, guesses):
-        if len(guesses) == len(self.phrase):
-            return True
-        else:
-            return False
+        for letter in self.phrase:
+            if letter not in guesses:
+                return False
+        return True
