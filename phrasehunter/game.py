@@ -1,7 +1,8 @@
 import random
 
 from phrasehunter.phrase import Phrase
-# Create your Game class logic in here.
+
+# Game Class starts the game, welcomes the player, grabs the phrase, returns the guess, offers a clue. 
 class Game:
     def __init__(self):
         self.missed = 0
@@ -28,12 +29,9 @@ class Game:
             if not self.active_phrases.check_guess(user_guess):
                 self.missed += 1
             if self.missed == 3 and self.clue_received != 1:
+                self.get_clue()
                 self.clue_received += 1
-                clue = input("\nWould you like a free letter? (Y/N) ")
-                if clue.lower() == 'y':
-                    self.active_phrases.get_clue(self.guesses)
-                else:
-                    continue
+
         self.game_over()
         self.play_again()
 
@@ -67,13 +65,20 @@ class Game:
                 return guess
 
 
+    def get_clue(self):
+        print("\nNumber missed: ", self.missed)
+        clue = input("Would you like a free letter? (Y/N) ")
+        if clue.lower() == 'y':
+            self.active_phrases.return_clue(self.guesses)
+
+
     def game_over(self):
         # this method displays a friendly win or loss message and ends the game.
         if self.missed == 5:
             print("\nNumber missed: ", self.missed)
             print("\nSorry, you ran out of guesses! Better luck next time!")
             print("\nThe correct phrase was: {}\n".format(self.active_phrases.phrase.capitalize()))
-        elif self.active_phrases.check_complete(self.guesses) == True:
+        else:
             print("\n{}!".format(self.active_phrases.phrase.capitalize()))
             print("\nHorray! You guessed the Phrase! You Win!!")
     

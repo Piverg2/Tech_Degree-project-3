@@ -1,8 +1,13 @@
+import random
+
+
 # This Class diplays the Phrase, checks the letters, and checks if phrase is complete
 class Phrase:
     def __init__(self, phrase):
         self.phrase = phrase.lower()
         self.clue_received = 0
+    
+    
     def display(self, guess):
         for letter in self.phrase: 
             if letter in guess:
@@ -20,12 +25,13 @@ class Phrase:
                 return False
     
     
-    def get_clue(self, guess):
+    def return_clue(self, guess):
         self.clue_received += 1
         for letter in self.phrase:
             if letter not in guess:
-                print(f"\nTry '{letter}''", end = " ")
+                print(f"\nTry this Free Letter: '{(letter)}'\n", end = " ")
                 break
+
 
     def check_complete(self, guesses):
         for letter in self.phrase:
