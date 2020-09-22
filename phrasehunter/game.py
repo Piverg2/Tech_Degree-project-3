@@ -52,7 +52,7 @@ class Game:
             try: 
                 guess = input('\nGuess a letter: ')
                 # Googled how to check if input is a number: https://www.w3schools.com/python/ref_string_isnumeric.asp#:~:text=The%20isnumeric()%20method%20returns,considered%20to%20be%20numeric%20values.
-                if guess.isnumeric():
+                if not guess.isalpha():
                     raise ValueError("\nThis phrase only contains letters")
                 elif len(guess) > 1:
                     raise ValueError("\nOne letter at a time please!")
